@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+<meta
+	content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
+	name='viewport' />
+<meta name="viewport" content="width=device-width" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<title>Time Lapse</title>
+
+<link href="css/bootstrap.css" rel="stylesheet" />
+<link href="css/coming-sssoon.css" rel="stylesheet" />
+
+<!--     Fonts     -->
+<link
+	href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css"
+	rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Grand+Hotel'
+	rel='stylesheet' type='text/css'>
+
+<style>
+.formBlock {
+	margin: 15px;
+}
+
+#formDiv {
+	margin: 0 auto;
+	width: 50%;
+}
+</style>
+
+</head>
+
+<body>
+	<div class="main"
+		style="background-image: url('images/backgroud.jpg')">
+		<div class="cover black" data-color="white"></div>
+
+		<!-- context시작 -->
+		<div class="container">
+			<h1 class="logo cursive">Verify</h1>
+			<br>
+			<div class="content">
+				<div class="subscribe">
+					<!--<h5 class="info-text">
+                        Join the waiting list for the beta. We keep you posted.
+                    </h5>-->
+
+					<div id="formDiv">
+						<input type="button" class="btn btn-warning btn-fill" onclick="getParams()" value="인증하기" id="verify">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- context끝 -->
+
+	</div>
+	
+	<script>
+		$(document).ready(function() {
+
+		});
+
+		function getParams() {
+			// 현재 페이지의 url
+			var url = decodeURIComponent(location.href);
+			// url이 encodeURIComponent로 인코딩 되었을 때 다시 디코딩
+			url = decodeURIComponent(url);
+
+			var params;
+			// url에서 '?' 문자 이후의 파라미터 문자열까지 자르기
+			params = url.substring(url.indexOf('?') + 1, url.length);
+			// 파라미터 구분자("&")로 분리
+			params = params.split("&");
+			//alert('params: ' + params);
+			// ("=")로 분리해서 값 받아오기
+			var code = params[0].split("=")[1];
+			var id = params[1].split("=")[1];
+
+			//alert('code: ' + code);
+			//alert('id: ' + id);
+
+			$.ajax({
+				url : 'http://15.164.166.15:8080/ps/members/verify',
+				type : 'GET',
+				data : {
+					code : code,
+					id : id
+				},
+				dataType: 'text',
+				success : function(data) {
+					if (data == 'success') {
+						alert('인증 성공!');
+						var chk = confirm('로그인 해주세요!');
+						if(chk){
+							location.href = "http://15.164.166.15:8080/psClient/login.jsp";
+						}
+					} else {
+						alert('인증 실패ㅠㅜ');
+					}
+				}
+			});
+		}
+	</script>
+</body>
+<script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+</html>
